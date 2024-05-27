@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const entryTemplate = document.querySelector(".entry-template").cloneNode(true);
     entryTemplate.classList.remove("entry-template");
 
-    async function fetchTransactions() {
+    async function fetchTransactions() { 
         try {
             const response = await fetch(API_URL);
             const transactions = await response.json();

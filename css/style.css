@@ -1,19 +1,14 @@
-/* Complete style.css */
-
-/* General Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body Styles */
 body {
     background-color: #f4f4f4;
     font-family: Arial, sans-serif;
 }
 
-/* Budget Tracker Table Styles */
 .budget-tracker {
     background-color: #fff;
     border-radius: 10px;
@@ -34,7 +29,6 @@ body {
     padding: 10px;
 }
 
-/* Input Styles */
 .input,
 .delete-entry {
     height: 30px;
@@ -50,7 +44,6 @@ body {
     border-color: #bbbbbb;
 }
 
-/* Select Styles */
 select,
 .input {
     font-size: 16px;
@@ -58,7 +51,6 @@ select,
     border-radius: 5px;
 }
 
-/* Delete Button Styles */
 .delete-entry {
     display: flex;
     align-items: center;
@@ -77,17 +69,15 @@ select,
     background-color: #e63d3d;
 }
 
-/* Control and Summary Styles */
 .controls,
 .summary {
     text-align: right;
     font-size: 20px;
 }
 
-/* Button Styles */
 .new-entry,
 .export-csv {
-    height: 30px;
+    height: 30px; 
     font-size: 16px;
     padding: 0 10px;
     margin: 0;
