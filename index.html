@@ -23,20 +23,22 @@
             </thead>
             <tbody class="entries">
                 <tr class="entry-template">
-                    <td>
-                        <input type="date" class="input input-date">
-                    </td>
-                    <td>
-                        <input type="text" class="input input-description" placeholder="(e.g salary, rent, etc.)">
-                    </td>
+                    <td><input type="date" class="input input-date"></td>
+                    <td><input type="text" class="input input-description"
+                            placeholder="(e.g salary, rent, shoes, etc.)"></td>
                     <td>
                         <select class="input input-category">
+                            <option value="salary">Salary</option>
                             <option value="grocery">Grocery</option>
                             <option value="entertainment">Entertainment</option>
-                            <option value="salary">Salary</option>
-                            <option value="sales">Sales</option>
+                            <option value="sales">Investment income</option>
+                            <option value="rent">Transportation</option>
+                            <option value="rent">Freelance income</option>
+                            <option value="rent">Utilities</option>
                             <option value="rent">Rent</option>
-                            <option value="other">Other</option>
+                            <option value="rent">Clothing</option>
+                            <option value="rent">Medical expenses</option>
+                            <option value="rent">Insurance</option>
                         </select>
                     </td>
                     <td>
@@ -57,6 +59,7 @@
                 <tr>
                     <td colspan="5" class="controls">
                         <button type="button" class="new-entry">New Entry</button>
+                        <button type="button" class="save">Save</button>
                         <button type="button" class="export-csv">Export to CSV</button>
                     </td>
                 </tr>

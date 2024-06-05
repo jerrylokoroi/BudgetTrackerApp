@@ -76,6 +76,7 @@ select,
 }
 
 .new-entry,
+.save,
 .export-csv {
     height: 30px; 
     font-size: 16px;
@@ -92,4 +93,18 @@ select,
 .new-entry:hover,
 .export-csv:hover {
     background-color: #009ea3;
+}
+
+.entries {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.entries th, .entries td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.entry-template {
+    display: none;
 }

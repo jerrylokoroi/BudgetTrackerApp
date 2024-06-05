@@ -1,13 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const API_URL = "https://localhost:5001/api/transactions";
+    const API_URL = "https://localhost:7006/api/transactions"; 
     const entriesContainer = document.querySelector(".entries");
     const newEntryButton = document.querySelector(".new-entry");
+    const saveButton = document.querySelector(".save");
     const exportCsvButton = document.querySelector(".export-csv");
     const totalElement = document.querySelector(".total");
     const entryTemplate = document.querySelector(".entry-template").cloneNode(true);
     entryTemplate.classList.remove("entry-template");
 
-    async function fetchTransactions() { 
+    async function fetchTransactions() {
         try {
             const response = await fetch(API_URL);
             const transactions = await response.json();
@@ -23,12 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const entry = entryTemplate.cloneNode(true);
         entry.querySelector(".input-date").value = new Date(transaction.date).toISOString().split("T")[0];
         entry.querySelector(".input-description").value = transaction.description;
+        entry.querySelector(".input-category").value = transaction.category.toLowerCase();
         entry.querySelector(".input-type").value = transaction.type.toLowerCase();
         entry.querySelector(".input-amount").value = transaction.amount;
         entry.dataset.id = transaction.id;
 
         const deleteButton = entry.querySelector(".delete-entry");
         deleteButton.addEventListener("click", () => deleteTransaction(transaction.id, entry));
+        
 
         entriesContainer.appendChild(entry);
     }
@@ -47,8 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const transaction = {
             date: entry.querySelector(".input-date").value,
             description: entry.querySelector(".input-description").value,
+            category: entry.querySelector(".input-category").value,
             type: entry.querySelector(".input-type").value,
-            amount: parseFloat(entry.querySelector(".input-amount").value)
+            amount: parseFloat(entry.querySelector(".input-amount").value),
         };
 
         const id = entry.dataset.id;
@@ -58,7 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (id) {
             method = 'PUT';
             url = `${API_URL}/${id}`;
-            transaction.id = parseInt(id);
         }
 
         try {
@@ -70,9 +73,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify(transaction)
             });
 
-            const savedTransaction = await response.json();
-            if (!id) {
-                entry.dataset.id = savedTransaction.id;
+            if (response.ok) {
+                const savedTransaction = await response.json();
+                if (!id) {
+                    entry.dataset.id = savedTransaction.id;
+                }
+                updateTotal();
+            } else {
+                console.error('Failed to save transaction', response.statusText);
             }
         } catch (error) {
             console.error(error);
@@ -80,49 +88,57 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateTotal() {
+        const entries = entriesContainer.querySelectorAll("tr");
         let total = 0;
-        document.querySelectorAll(".entries tr:not(.entry-template)").forEach(entry => {
+
+        entries.forEach(entry => {
             const amount = parseFloat(entry.querySelector(".input-amount").value) || 0;
             const type = entry.querySelector(".input-type").value;
+
             if (type === "income") {
                 total += amount;
             } else {
                 total -= amount;
             }
         });
+
         totalElement.textContent = `Ksh ${total.toFixed(2)}`;
     }
 
-    async function addNewTransaction() {
+    newEntryButton.addEventListener("click", () => {
         const entry = entryTemplate.cloneNode(true);
-        entry.querySelector(".delete-entry").addEventListener("click", () => {
-            entry.remove();
-            updateTotal();
-        });
+        const deleteButton = entry.querySelector(".delete-entry");
+        deleteButton.addEventListener("click", () => entry.remove());
         entriesContainer.appendChild(entry);
+    });
 
-        await saveTransaction(entry);
-        updateTotal();
-    }
+    saveButton.addEventListener("click", async () => {
+        const entries = entriesContainer.querySelectorAll("tr");
+        for (const entry of entries) {
+            await saveTransaction(entry);
+        }
+        await fetchTransactions();
+    });
 
-    async function exportToCsv() {
+    exportCsvButton.addEventListener("click", async () => {
         try {
             const response = await fetch(`${API_URL}/export/csv`);
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'transactions.csv';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'transactions.csv';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            } else {
+                console.error('Failed to export CSV', response.statusText);
+            }
         } catch (error) {
             console.error(error);
         }
-    }
-
-    newEntryButton.addEventListener("click", addNewTransaction);
-    exportCsvButton.addEventListener("click", exportToCsv);
+    });
 
     fetchTransactions();
 });
