@@ -11,6 +11,7 @@
 
 <body>
     <div id="app">
+        <h1 class="welcome-title">Budget Tracker App</h1>
         <table class="budget-tracker">
             <thead>
                 <tr>
@@ -19,6 +20,7 @@
                     <th>Category</th>
                     <th>Type</th>
                     <th>Amount</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody class="entries">
@@ -33,12 +35,12 @@
                             <option value="entertainment">Entertainment</option>
                             <option value="sales">Investment income</option>
                             <option value="rent">Transportation</option>
-                            <option value="rent">Freelance income</option>
-                            <option value="rent">Utilities</option>
+                            <option value="freelance">Freelance income</option>
+                            <option value="utilities">Utilities</option>
                             <option value="rent">Rent</option>
-                            <option value="rent">Clothing</option>
-                            <option value="rent">Medical expenses</option>
-                            <option value="rent">Insurance</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="medical">Medical expenses</option>
+                            <option value="insurance">Insurance</option>
                         </select>
                     </td>
                     <td>
@@ -47,26 +49,22 @@
                             <option value="expense">Expense</option>
                         </select>
                     </td>
-                    <td>
-                        <input type="number" class="input input-amount">
-                    </td>
-                    <td>
-                        <button type="button" class="delete-entry">&#10005;</button>
-                    </td>
+                    <td><input type="number" class="input input-amount"></td>
+                    <td><button type="button" class="delete-entry">&#10005;</button></td>
                 </tr>
             </tbody>
             <tbody>
                 <tr>
-                    <td colspan="5" class="controls">
-                        <button type="button" class="new-entry">New Entry</button>
-                        <button type="button" class="save">Save</button>
-                        <button type="button" class="export-csv">Export to CSV</button>
+                    <td colspan="6" class="controls">
+                        <button type="button" class="new-entry button-bounce">New Entry</button>
+                        <button type="button" class="save button-pulse">Save</button>
+                        <button type="button" class="export-csv button-zoom">Export to CSV</button>
                     </td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="5" class="summary">
+                    <td colspan="6" class="summary">
                         <strong>Total</strong>
                         <span class="total">Ksh 0.00</span>
                     </td>
@@ -74,7 +72,13 @@
             </tfoot>
         </table>
     </div>
-
+    <div class="theme-switch">
+        <label class="switch">
+            <input type="checkbox" id="theme-toggle">
+            <span class="slider round"></span>
+        </label>
+        <span>Toggle Dark Mode</span>
+    </div>
     <script src="js/main.js"></script>
 </body>
 

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const API_URL = "https://localhost:7006/api/transactions"; 
+    const API_URL = "https://localhost:7006/api/transactions";
     const entriesContainer = document.querySelector(".entries");
     const newEntryButton = document.querySelector(".new-entry");
     const saveButton = document.querySelector(".save");
@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalElement = document.querySelector(".total");
     const entryTemplate = document.querySelector(".entry-template").cloneNode(true);
     entryTemplate.classList.remove("entry-template");
+    const themeToggle = document.getElementById("theme-toggle");
 
     async function fetchTransactions() {
         try {
@@ -22,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function addTransactionToTable(transaction) {
         const entry = entryTemplate.cloneNode(true);
+        entry.classList.add("new-entry-row");
         entry.querySelector(".input-date").value = new Date(transaction.date).toISOString().split("T")[0];
         entry.querySelector(".input-description").value = transaction.description;
         entry.querySelector(".input-category").value = transaction.category.toLowerCase();
@@ -31,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const deleteButton = entry.querySelector(".delete-entry");
         deleteButton.addEventListener("click", () => deleteTransaction(transaction.id, entry));
-        
 
         entriesContainer.appendChild(entry);
     }
@@ -39,8 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
     async function deleteTransaction(id, entry) {
         try {
             await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-            entry.remove();
-            updateTotal();
+            entry.classList.add("fade-out");
+            entry.addEventListener("animationend", () => {
+                entry.remove();
+                updateTotal();
+            });
         } catch (error) {
             console.error(error);
         }
@@ -65,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
+            saveButton.classList.add("save-saving");
             const response = await fetch(url, {
                 method,
                 headers: {
@@ -79,11 +84,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     entry.dataset.id = savedTransaction.id;
                 }
                 updateTotal();
+                saveButton.classList.remove("save-saving");
             } else {
                 console.error('Failed to save transaction', response.statusText);
             }
         } catch (error) {
             console.error(error);
+            saveButton.classList.remove("save-saving");
         }
     }
 
@@ -102,11 +109,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
+        totalElement.classList.add("total-update");
         totalElement.textContent = `Ksh ${total.toFixed(2)}`;
+        setTimeout(() => totalElement.classList.remove("total-update"), 500);
     }
 
     newEntryButton.addEventListener("click", () => {
         const entry = entryTemplate.cloneNode(true);
+        entry.classList.add("new-entry-row");
         const deleteButton = entry.querySelector(".delete-entry");
         deleteButton.addEventListener("click", () => entry.remove());
         entriesContainer.appendChild(entry);
@@ -138,6 +148,10 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             console.error(error);
         }
+    });
+
+    themeToggle.addEventListener("change", () => {
+        document.body.classList.toggle("dark-mode");
     });
 
     fetchTransactions();
