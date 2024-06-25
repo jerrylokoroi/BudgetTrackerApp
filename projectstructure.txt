@@ -1,0 +1,13 @@
+budget-tracker/
+│
+├── css/
+│   └── style2.css
+│
+├── js/
+│   ├── main2.js
+│   ├── api.js
+│   ├── dom.js
+│   ├── eventHandlers.js
+│   └── utils.js
+│
+└── index.html

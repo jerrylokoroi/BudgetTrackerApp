@@ -47,14 +47,14 @@ body {
     animation: bounce 2s infinite;
 }
 
-@keyframes bounce {
+/* @keyframes bounce {
     0%, 100% {
         transform: translateY(0);
     }
     50% {
         transform: translateY(-20px);
     }
-}
+} */
 
 .budget-tracker {
     background-color: var(--table-background-color);
