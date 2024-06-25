@@ -1,10 +1,10 @@
 budget-tracker/
 │
 ├── css/
-│   └── style2.css
+│   └── style.css
 │
 ├── js/
-│   ├── main2.js
+│   ├── main.js
 │   ├── api.js
 │   ├── dom.js
 │   ├── eventHandlers.js
